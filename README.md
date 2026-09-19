@@ -58,7 +58,7 @@ O schema usa `auth.users`, Row Level Security e guarda a odd copiada no momento 
 
 ## Publicar no Netlify
 
-O projeto usa o `index.html` na raiz como entrada da aplicação. Ele contém `netlify.toml` e `client/public/_redirects` para publicar a tela de login como uma SPA usando `dist`.
+O projeto usa a estrutura padrão do Vite, com `index.html` na raiz, `vite.config.js` na raiz e publicação da SPA em `dist`.
 
 No Netlify, configure estas variáveis em **Site configuration > Environment variables**:
 

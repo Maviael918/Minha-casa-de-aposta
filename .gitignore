@@ -3,5 +3,4 @@ node_modules/
 server/data/*.db
 server/data/*.db-*
 dist/
-client/index.html
 .DS_Store
