@@ -40,6 +40,7 @@ function App() {
   const [betMessage, setBetMessage] = useState('')
   const [apiStatus, setApiStatus] = useState(null)
   const [session, setSession] = useState(undefined)
+  const [shareMessage, setShareMessage] = useState('')
 
   useEffect(() => {
     if (!supabaseConfigured) {
@@ -73,6 +74,24 @@ function App() {
   const upcomingCount = fixtures.filter((fixture) => fixture.status === 'NOT_STARTED').length
   const totalOdd = selections.reduce((total, selection) => total * selection.odd, 1)
   const potentialReturn = Number(stake || 0) * totalOdd
+
+  async function shareApp() {
+    const shareData = {
+      title: 'Simulador de Apostas',
+      text: 'Acesse meu simulador de apostas esportivas com dinheiro fictício.',
+      url: window.location.href,
+    }
+    try {
+      if (navigator.share) await navigator.share(shareData)
+      else {
+        await navigator.clipboard.writeText(shareData.url)
+        setShareMessage('Link copiado')
+        window.setTimeout(() => setShareMessage(''), 2200)
+      }
+    } catch (error) {
+      if (error.name !== 'AbortError') setShareMessage('Não foi possível compartilhar')
+    }
+  }
 
   if (session === undefined) return <div className="auth-loading">Carregando sessão...</div>
   if (!session) return <AuthPage />
@@ -138,6 +157,7 @@ function App() {
         <header className="topbar">
           <div className="mobile-brand"><span className="brand-mark">S</span><b>SIMULADOR</b></div>
           <div className="topbar-actions">
+            <button className="share-button" onClick={shareApp} title="Compartilhar simulador"><span>↗</span> Compartilhar</button>
             {apiStatus && <div className={`api-status ${apiStatus.online ? 'online' : 'offline'}`} title={apiStatus.message}>
               <span /> API {apiStatus.online ? 'conectada' : apiStatus.configured ? 'indisponível' : 'em modo mock'}
               {apiStatus.current !== null && <b>{apiStatus.current}/{apiStatus.limit}</b>}
@@ -164,6 +184,7 @@ function App() {
             <small>{upcomingCount} próximos · {liveCount} ao vivo</small>
           </div>
         </section>
+        {shareMessage && <div className="share-message" role="status">{shareMessage}</div>}
 
         <div className="content-toolbar">
           <div className="section-heading">
@@ -241,6 +262,10 @@ function App() {
         </section>
         <footer className="disclaimer"><span>ⓘ</span> Este é um ambiente de simulação. Nenhum dinheiro real é utilizado.</footer>
       </main>
+      <nav className="mobile-bottom-nav" aria-label="Navegação mobile">
+        {navItems.slice(0, 4).map(([icon, label]) => <button className={activeNav === label ? 'active' : ''} key={label} onClick={() => setActiveNav(label)}><span>{icon}</span>{label}</button>)}
+        <button onClick={shareApp}><span>↗</span>Enviar</button>
+      </nav>
     </div>
   )
 }

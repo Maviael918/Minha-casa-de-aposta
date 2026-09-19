@@ -56,6 +56,21 @@ O arquivo `supabase/schema.sql` cria as tabelas de carteira, apostas, seleções
 
 O schema usa `auth.users`, Row Level Security e guarda a odd copiada no momento da aposta. Nesta etapa o sistema continua usando SQLite local; a conexão do backend com Supabase será feita em uma etapa posterior, usando variáveis de ambiente no servidor.
 
+## Publicar no Netlify
+
+O projeto usa o `index.html` na raiz como entrada da aplicação. Ele contém `netlify.toml` e `client/public/_redirects` para publicar a tela de login como uma SPA usando `client/dist`.
+
+No Netlify, configure estas variáveis em **Site configuration > Environment variables**:
+
+```env
+VITE_SUPABASE_URL=https://seu-projeto.supabase.co
+VITE_SUPABASE_ANON_KEY=sua-chave-anon-public
+```
+
+Depois, no Supabase, em **Authentication > URL Configuration**, adicione o domínio do Netlify em **Site URL** e **Redirect URLs**. Use somente a chave `anon/public` no frontend. Nunca publique `SUPABASE_SERVICE_ROLE_KEY` no Netlify frontend.
+
+O login/cadastro funciona no Netlify porque usa Supabase Auth diretamente. As rotas locais `/api/*` continuam dependendo do backend Node; para usar apostas e fixtures reais em produção, publique o backend separadamente e configure um endereço de API no frontend.
+
 ## Etapas atuais
 
 - Estrutura full-stack React + Vite + Express

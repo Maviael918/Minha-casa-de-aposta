@@ -17,7 +17,14 @@ export default function AuthPage() {
       if (!supabaseConfigured) throw new Error('Configure VITE_SUPABASE_ANON_KEY no arquivo .env.')
       const result = mode === 'login'
         ? await supabase.auth.signInWithPassword({ email, password })
-        : await supabase.auth.signUp({ email, password, options: { data: { display_name: name } } })
+        : await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+              data: { display_name: name },
+              emailRedirectTo: window.location.origin,
+            },
+          })
       if (result.error) throw result.error
       setMessage(mode === 'login' ? 'Login realizado.' : 'Cadastro realizado. Verifique seu e-mail se a confirmação estiver ativa.')
     } catch (error) {

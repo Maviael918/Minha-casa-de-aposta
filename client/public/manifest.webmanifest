@@ -1,0 +1,10 @@
+{
+  "name": "Simulador de Apostas",
+  "short_name": "Simulador",
+  "lang": "pt-BR",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0c1715",
+  "theme_color": "#10231f",
+  "description": "Simulação de apostas esportivas com dinheiro fictício."
+}
