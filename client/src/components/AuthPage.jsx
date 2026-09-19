@@ -14,7 +14,7 @@ export default function AuthPage() {
     setMessage('')
     setBusy(true)
     try {
-      if (!supabaseConfigured) throw new Error('Configure VITE_SUPABASE_ANON_KEY no arquivo .env.')
+      if (!supabaseConfigured) throw new Error('Configure VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY no .env local ou nas Environment variables do Netlify e faça um novo deploy.')
       const result = mode === 'login'
         ? await supabase.auth.signInWithPassword({ email, password })
         : await supabase.auth.signUp({
